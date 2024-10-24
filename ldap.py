@@ -5,7 +5,7 @@ import json
 
 # Send an HTTP GET request to the website
 url = 'http://ldapweb.iitd.ac.in/LDAP/courses/'
-response = requests.get(url)
+response = requests.get(url,verify=False)
 datadict = {}
 fileptr = open('data.json', 'w')
 
@@ -24,7 +24,7 @@ if response.status_code == 200:
         print(i)
         temp = (links[i]['href'])
         temp = url + temp
-        response = requests.get(temp)
+        response = requests.get(temp,verify=False)
         soup = BeautifulSoup(response.text, 'html.parser')
         course = soup.find_all('h2')[1].text
         data = soup.find_all('td', align = 'LEFT')

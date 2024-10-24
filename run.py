@@ -11,7 +11,9 @@ a=1
 b=1
 c=1
 d=1
-s = [set({}), set({}), set({}), set({})]
+e=1
+f=1
+s = [set({}), set({}), set({}), set({}), set({}), set({})]
 
 for i in range(0, len(data1)):
     if(data1[i][0:4] == '2102'):
@@ -38,6 +40,26 @@ for i in range(0, len(data1)):
             d=0
         print(data1[i][5:])
         s[3].add(data1[i][5:])
-
-
+    if(data1[i][0:4] == '2302'):
+        if(e==1):
+            print("\n2302 8th SEM")
+            e=0
+        print(data1[i][5:])
+        s[4].add(data1[i][5:])
+    if(data1[i][0:4] == '2401'):
+        if(f==1):
+            print("\n2401 9th SEM")
+            f=0
+        print(data1[i][5:])
+        s[5].add(data1[i][5:])
         
+
+set_fail = set({})
+
+for i in range(0, 6):
+    for j in range(i+1, 6):
+        set_fail = set_fail.union(s[i].intersection(s[j]))
+    
+print("\nFailed in:")
+for i in set_fail:
+    print(i)
