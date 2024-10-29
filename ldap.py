@@ -2,12 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import json
+import warnings
+warnings.filterwarnings("ignore")
 
 # Send an HTTP GET request to the website
 url = 'http://ldapweb.iitd.ac.in/LDAP/courses/'
-response = requests.get(url,verify=False)
+response = requests.get(url, verify=False)
 datadict = {}
-fileptr = open('data.json', 'w')
 
 # Check if the request was successful
 if response.status_code == 200:
@@ -17,14 +18,12 @@ if response.status_code == 200:
     # Extract data using BeautifulSoup
 
     links = soup.find_all('a', href=lambda href: href and href.endswith('.shtml'))
-    # data = soup.find('a href = ')
     
-    # Print the extracted data
+    # Format and dump the extracted data
     for i in range(0, len(links)):
-        print(i)
         temp = (links[i]['href'])
         temp = url + temp
-        response = requests.get(temp,verify=False)
+        response = requests.get(temp, verify=False)
         soup = BeautifulSoup(response.text, 'html.parser')
         course = soup.find_all('h2')[1].text
         data = soup.find_all('td', align = 'LEFT')
@@ -33,6 +32,8 @@ if response.status_code == 200:
                 datadict[data[j].text] = [course]
             else:
                 datadict[data[j].text].append(course)
+    fileptr = open('data.json', 'w')
     json.dump(datadict, fileptr)
+    print(f"Retrieved data of {len(links)} courses and {len(datadict)} people")
 else:
     print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
